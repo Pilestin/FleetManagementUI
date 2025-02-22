@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Filo Yönetimi - Konfigürasyon Yönetimi</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+  />
+  <style>
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      min-height: 100vh;
+    }
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 1rem;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .sidebar a.active {
+      background-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">Filo Yönetimi</a>
+    <button 
+      class="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarSupportedContent" 
+      aria-controls="navbarSupportedContent" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div 
+      class="collapse navbar-collapse justify-content-end" 
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <!-- Kullanıcı Bilgisi / Profil -->
+        <li class="nav-item">
+          <a class="nav-link" href="#">Kullanıcı Adı</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Çıkış Yap</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Ana içerik -->
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="index.html">Dashboard</a>
+    <a href="talepYonetimi.html">Talep Yönetimi</a>
+    <a href="haritaGorunumu.html">Harita Görünümü</a>
+    <a href="rotaOptimizasyonu.html">Rota Optimizasyonu</a>
+    <a href="aracYonetimi.html">Araç Yönetimi</a>
+    <a href="konfigurasyonYonetimi.html" class="active">Konfigürasyon</a>
+    <a href="raporlar.html">Raporlar</a>
+  </div>
+
+  <div class="container-fluid p-4">
+    <h2>Konfigürasyon Yönetimi</h2>
+    <form>
+      <div class="mb-3">
+        <label for="varsayilanAlgoritma" class="form-label">
+          Varsayılan Rota Opt. Algoritması
+        </label>
+        <select id="varsayilanAlgoritma" class="form-select">
+          <option value="genetik">Genetik Algoritma</option>
+          <option value="tabu">Tabu Araması</option>
+          <option value="milp">MILP Solver</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="varsayilanAmac" class="form-label">
+          Varsayılan Amaç Fonksiyonu
+        </label>
+        <select id="varsayilanAmac" class="form-select">
+          <option value="toplamSure">Toplam Süre Minimizasyonu</option>
+          <option value="toplamMaliyet">Toplam Maliyet Minimizasyonu</option>
+          <option value="toplamMesafe">Toplam Mesafe Minimizasyonu</option>
+        </select>
+      </div>
+      <!-- Diğer temel konfigürasyonlar -->
+
+      <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
+</body>
+</html>

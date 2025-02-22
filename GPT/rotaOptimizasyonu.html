@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Filo Yönetimi - Rota Optimizasyonu</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+  />
+  <style>
+    .sidebar {
+      width: 250px;
+      background-color: #343a40;
+      min-height: 100vh;
+    }
+    .sidebar a {
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 1rem;
+    }
+    .sidebar a:hover {
+      background-color: #495057;
+    }
+    .sidebar a.active {
+      background-color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">Filo Yönetimi</a>
+    <button 
+      class="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarSupportedContent" 
+      aria-controls="navbarSupportedContent" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div 
+      class="collapse navbar-collapse justify-content-end" 
+      id="navbarSupportedContent"
+    >
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <!-- Kullanıcı Bilgisi / Profil -->
+        <li class="nav-item">
+          <a class="nav-link" href="#">Kullanıcı Adı</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Çıkış Yap</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Ana içerik -->
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="index.html">Dashboard</a>
+    <a href="talepYonetimi.html">Talep Yönetimi</a>
+    <a href="haritaGorunumu.html">Harita Görünümü</a>
+    <a href="rotaOptimizasyonu.html" class="active">Rota Optimizasyonu</a>
+    <a href="aracYonetimi.html">Araç Yönetimi</a>
+    <a href="konfigurasyonYonetimi.html">Konfigürasyon</a>
+    <a href="raporlar.html">Raporlar</a>
+  </div>
+
+  <div class="container-fluid p-4">
+    <h2>Rota Optimizasyonu</h2>
+
+    <!-- Konfigürasyon Parametreleri -->
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label for="amachFonksiyonu" class="form-label">Amaç Fonksiyonu</label>
+        <select id="amachFonksiyonu" class="form-select">
+          <option value="toplamSure">Toplam Süre Minimizasyonu</option>
+          <option value="toplamMaliyet">Toplam Maliyet Minimizasyonu</option>
+          <option value="toplamMesafe">Toplam Mesafe Minimizasyonu</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="algSecimi" class="form-label">Algoritma Seçimi</label>
+        <select id="algSecimi" class="form-select">
+          <option value="genetik">Genetik Algoritma</option>
+          <option value="tabu">Tabu Araması</option>
+          <option value="milp">MILP Solver</option>
+        </select>
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="sarjStratejisi" class="form-label">Şarj Stratejisi</label>
+        <select id="sarjStratejisi" class="form-select">
+          <option value="hizliSarj">Hızlı Şarj</option>
+          <option value="optimumSarj">Optimum Şarj</option>
+          <option value="tamSarj">Tam Şarj</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Parametre Alanı (Örnek) -->
+    <div class="mb-3">
+      <label for="populasyonBoyutu" class="form-label">Popülasyon Boyutu (Alg. Parametre)</label>
+      <input type="number" class="form-control" id="populasyonBoyutu" value="50" />
+    </div>
+
+    <!-- Çoklu Algoritma Karşılaştırma ve Çalıştırma -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="chkGenetik" 
+            value="genetik"
+            checked
+          />
+          <label class="form-check-label" for="chkGenetik">Genetik</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="chkTabu" 
+            value="tabu"
+          />
+          <label class="form-check-label" for="chkTabu">Tabu Araması</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="chkMilp" 
+            value="milp"
+          />
+          <label class="form-check-label" for="chkMilp">MILP Solver</label>
+        </div>
+      </div>
+      <button class="btn btn-success">Optimizasyonu Başlat</button>
+    </div>
+
+    <!-- Sonuç Bölümü / Karşılaştırma Tablosu -->
+    <div class="mt-4">
+      <h5>Sonuç Karşılaştırma</h5>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Algoritma</th>
+            <th>Toplam Mesafe</th>
+            <th>Toplam Süre</th>
+            <th>Hesaplama Süresi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Genetik Algoritma</td>
+            <td>120 km</td>
+            <td>4.5 saat</td>
+            <td>30 sn</td>
+          </tr>
+          <tr>
+            <td>Tabu Araması</td>
+            <td>125 km</td>
+            <td>4.7 saat</td>
+            <td>25 sn</td>
+          </tr>
+          <tr>
+            <td>MILP Solver</td>
+            <td>115 km</td>
+            <td>4.6 saat</td>
+            <td>45 sn</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
+</body>
+</html>

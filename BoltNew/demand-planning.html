@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demand Planning - Fleet Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="sidebar-title">Fleet Manager</h3>
+          <button id="sidebarCollapse" class="btn btn-link text-light">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li>
+          <a href="index.html" class="nav-link text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="route-optimization.html" class="nav-link text-white">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span class="menu-text">Route Optimization</span>
+          </a>
+        </li>
+        <li>
+          <a href="maintenance.html" class="nav-link text-white">
+            <i class="bi bi-tools me-2"></i>
+            <span class="menu-text">Maintenance</span>
+          </a>
+        </li>
+        <li>
+          <a href="performance.html" class="nav-link text-white">
+            <i class="bi bi-graph-up me-2"></i>
+            <span class="menu-text">Performance</span>
+          </a>
+        </li>
+        <li>
+          <a href="tracking.html" class="nav-link text-white">
+            <i class="bi bi-truck me-2"></i>
+            <span class="menu-text">Vehicle Tracking</span>
+          </a>
+        </li>
+        <li>
+          <a href="charging.html" class="nav-link text-white">
+            <i class="bi bi-battery-charging me-2"></i>
+            <span class="menu-text">EV Charging</span>
+          </a>
+        </li>
+        <li>
+          <a href="inventory.html" class="nav-link text-white">
+            <i class="bi bi-box-seam me-2"></i>
+            <span class="menu-text">Inventory Management</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="demand-planning.html" class="nav-link text-white">
+            <i class="bi bi-graph-up-arrow me-2"></i>
+            <span class="menu-text">Demand Planning</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light" id="themeToggle">
+          <i class="bi bi-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+      <div class="container-fluid p-4">
+        <!-- Overview Cards -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Forecast Accuracy</h6>
+                    <h2 class="card-title mb-0">92%</h2>
+                  </div>
+                  <div class="text-primary">
+                    <i class="bi bi-graph-up-arrow display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Expected Growth</h6>
+                    <h2 class="card-title mb-0">15%</h2>
+                  </div>
+                  <div class="text-success">
+                    <i class="bi bi-arrow-up-right display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Service Level</h6>
+                    <h2 class="card-title mb-0">95%</h2>
+                  </div>
+                  <div class="text-info">
+                    <i class="bi bi-people display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Demand Patterns</h6>
+                    <h2 class="card-title mb-0">3</h2>
+                  </div>
+                  <div class="text-warning">
+                    <i class="bi bi-clock-history display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Demand Forecast -->
+          <div class="col-md-8">
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Demand Forecast</h5>
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary active">Week</button>
+                  <button class="btn btn-outline-secondary">Month</button>
+                  <button class="btn btn-outline-secondary">Quarter</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="demandForecastChart" style="height: 300px;"></div>
+              </div>
+            </div>
+
+            <!-- Regional Analysis -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Regional Analysis</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Region</th>
+                        <th>Current Demand</th>
+                        <th>Forecast</th>
+                        <th>Growth</th>
+                        <th>Confidence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>North</td>
+                        <td>1,200</td>
+                        <td>1,450</td>
+                        <td><span class="text-success">+20.8%</span></td>
+                        <td>95%</td>
+                      </tr>
+                      <tr>
+                        <td>South</td>
+                        <td>980</td>
+                        <td>1,100</td>
+                        <td><span class="text-success">+12.2%</span></td>
+                        <td>92%</td>
+                      </tr>
+                      <tr>
+                        <td>East</td>
+                        <td>850</td>
+                        <td>920</td>
+                        <td><span class="text-success">+8.2%</span></td>
+                        <td>88%</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Planning Analytics -->
+          <div class="col-md-4">
+            <!-- Seasonal Patterns -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Seasonal Patterns</h5>
+              </div>
+              <div class="card-body">
+                <div id="seasonalPatternChart" style="height: 250px;"></div>
+              </div>
+            </div>
+
+            <!-- Customer Satisfaction -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Customer Satisfaction</h5>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <div>
+                    <h3 class="mb-0">4.8</h3>
+                    <small class="text-muted">Average Rating</small>
+                  </div>
+                  <div class="text-warning">
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-star-half"></i>
+                  </div>
+                </div>
+                <div class="progress mb-2" style="height: 8px;">
+                  <div class="progress-bar bg-success" style="width: 85%"></div>
+                </div>
+                <small class="text-muted">Based on delivery performance</small>
+              </div>
+            </div>
+
+            <!-- Stock Recommendations -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Stock Recommendations</h5>
+              </div>
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Increase Stock</h6>
+                      <small class="text-success">High Confidence</small>
+                    </div>
+                    <p class="mb-1">Product A in North Region</p>
+                    <small class="text-muted">Based on 15% growth forecast</small>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Optimize Stock</h6>
+                      <small class="text-warning">Medium Confidence</small>
+                    </div>
+                    <p class="mb-1">Product B in South Region</p>
+                    <small class="text-muted">Based on seasonal pattern</small>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Monitor Stock</h6>
+                      <small class="text-info">Observation</small>
+                    </div>
+                    <p class="mb-1">Product C in East Region</p>
+                    <small class="text-muted">Unusual demand pattern detected</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="src/demand-planning.js"></script>
+</body>
+</html>

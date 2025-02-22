@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Management Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="sidebar-title">Fleet Manager</h3>
+          <button id="sidebarCollapse" class="btn btn-link text-light">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li class="active">
+          <a href="index.html" class="nav-link text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="route-optimization.html" class="nav-link text-white">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span class="menu-text">Route Optimization</span>
+          </a>
+        </li>
+        <li>
+          <a href="maintenance.html" class="nav-link text-white">
+            <i class="bi bi-tools me-2"></i>
+            <span class="menu-text">Maintenance</span>
+          </a>
+        </li>
+        <li>
+          <a href="performance.html" class="nav-link text-white">
+            <i class="bi bi-graph-up me-2"></i>
+            <span class="menu-text">Performance</span>
+          </a>
+        </li>
+        <li>
+          <a href="tracking.html" class="nav-link text-white">
+            <i class="bi bi-truck me-2"></i>
+            <span class="menu-text">Vehicle Tracking</span>
+          </a>
+        </li>
+        <li>
+          <a href="charging.html" class="nav-link text-white">
+            <i class="bi bi-battery-charging me-2"></i>
+            <span class="menu-text">EV Charging</span>
+          </a>
+        </li>
+        <li>
+          <a href="inventory.html" class="nav-link text-white">
+            <i class="bi bi-box-seam me-2"></i>
+            <span class="menu-text">Inventory Management</span>
+          </a>
+        </li>
+        <li>
+          <a href="demand-planning.html" class="nav-link text-white">
+            <i class="bi bi-graph-up-arrow me-2"></i>
+            <span class="menu-text">Demand Planning</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light" id="themeToggle">
+          <i class="bi bi-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+      <div class="container-fluid p-4">
+        <!-- System Status -->
+        <div id="systemStatus" class="mb-4"></div>
+
+        <!-- Quick Access Modules -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <a href="route-optimization.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-geo-alt display-4 mb-2 text-primary"></i>
+                  <h5>Route Optimization</h5>
+                  <p class="text-muted mb-0">Optimize delivery routes</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a href="maintenance.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-tools display-4 mb-2 text-warning"></i>
+                  <h5>Maintenance</h5>
+                  <p class="text-muted mb-0">Vehicle maintenance</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a href="charging.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-battery-charging display-4 mb-2 text-success"></i>
+                  <h5>EV Charging</h5>
+                  <p class="text-muted mb-0">Manage charging stations</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a href="performance.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-graph-up display-4 mb-2 text-info"></i>
+                  <h5>Performance</h5>
+                  <p class="text-muted mb-0">View analytics</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Additional Quick Access Modules -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <a href="tracking.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-truck display-4 mb-2 text-secondary"></i>
+                  <h5>Vehicle Tracking</h5>
+                  <p class="text-muted mb-0">Track fleet location</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a href="inventory.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-box-seam display-4 mb-2 text-danger"></i>
+                  <h5>Inventory</h5>
+                  <p class="text-muted mb-0">Manage warehouse stock</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3">
+            <a href="demand-planning.html" class="text-decoration-none">
+              <div class="card module-card">
+                <div class="card-body d-flex flex-column align-items-center justify-content-center text-center">
+                  <i class="bi bi-graph-up-arrow display-4 mb-2 text-purple"></i>
+                  <h5>Demand Planning</h5>
+                  <p class="text-muted mb-0">Forecast and plan</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Live Tracking Map -->
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Live Vehicle Tracking</h5>
+              </div>
+              <div class="card-body p-0">
+                <div id="trackingMap" style="height: 400px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notifications Panel -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Notifications</h5>
+              </div>
+              <div class="card-body p-0">
+                <div id="notificationsList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

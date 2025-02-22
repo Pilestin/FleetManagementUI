@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV Charging - Fleet Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="sidebar-title">Fleet Manager</h3>
+          <button id="sidebarCollapse" class="btn btn-link text-light">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li>
+          <a href="index.html" class="nav-link text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="route-optimization.html" class="nav-link text-white">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span class="menu-text">Route Optimization</span>
+          </a>
+        </li>
+        <li>
+          <a href="maintenance.html" class="nav-link text-white">
+            <i class="bi bi-tools me-2"></i>
+            <span class="menu-text">Maintenance</span>
+          </a>
+        </li>
+        <li>
+          <a href="performance.html" class="nav-link text-white">
+            <i class="bi bi-graph-up me-2"></i>
+            <span class="menu-text">Performance</span>
+          </a>
+        </li>
+        <li>
+          <a href="tracking.html" class="nav-link text-white">
+            <i class="bi bi-truck me-2"></i>
+            <span class="menu-text">Vehicle Tracking</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="charging.html" class="nav-link text-white">
+            <i class="bi bi-battery-charging me-2"></i>
+            <span class="menu-text">EV Charging</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light" id="themeToggle">
+          <i class="bi bi-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+      <div class="container-fluid p-4">
+        <!-- Overview Cards -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Active Charging</h6>
+                    <h2 class="card-title mb-0">5</h2>
+                  </div>
+                  <div class="text-primary">
+                    <i class="bi bi-battery-charging display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Available Stations</h6>
+                    <h2 class="card-title mb-0">8</h2>
+                  </div>
+                  <div class="text-success">
+                    <i class="bi bi-plug display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Green Energy</h6>
+                    <h2 class="card-title mb-0">85%</h2>
+                  </div>
+                  <div class="text-success">
+                    <i class="bi bi-leaf display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Energy Cost</h6>
+                    <h2 class="card-title mb-0">$0.12</h2>
+                    <small class="text-muted">per kWh</small>
+                  </div>
+                  <div class="text-warning">
+                    <i class="bi bi-currency-dollar display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Charging Stations Map -->
+          <div class="col-md-8">
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Charging Stations Map</h5>
+              </div>
+              <div class="card-body p-0">
+                <div id="chargingMap" style="height: 400px;"></div>
+              </div>
+            </div>
+
+            <!-- Charging Schedule -->
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Charging Schedule</h5>
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary active">Today</button>
+                  <button class="btn btn-outline-secondary">Tomorrow</button>
+                  <button class="btn btn-outline-secondary">Week</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Vehicle</th>
+                        <th>Station</th>
+                        <th>Start Time</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>EV-001</td>
+                        <td>Station A</td>
+                        <td>14:30</td>
+                        <td>45 min</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>EV-002</td>
+                        <td>Station C</td>
+                        <td>15:00</td>
+                        <td>60 min</td>
+                        <td><span class="badge bg-warning">Scheduled</span></td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>EV-003</td>
+                        <td>Station B</td>
+                        <td>16:15</td>
+                        <td>30 min</td>
+                        <td><span class="badge bg-warning">Scheduled</span></td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charging Analytics -->
+          <div class="col-md-4">
+            <!-- Energy Consumption -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Energy Consumption</h5>
+              </div>
+              <div class="card-body">
+                <div id="energyConsumptionChart" style="height: 250px;"></div>
+              </div>
+            </div>
+
+            <!-- Station Status -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Station Status</h5>
+              </div>
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Station A</h6>
+                        <small class="text-muted">150kW DC Fast Charger</small>
+                      </div>
+                      <span class="badge bg-success">Available</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 5px;">
+                      <div class="progress-bar bg-success" style="width: 0%"></div>
+                    </div>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Station B</h6>
+                        <small class="text-muted">150kW DC Fast Charger</small>
+                      </div>
+                      <span class="badge bg-primary">In Use</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 5px;">
+                      <div class="progress-bar bg-primary" style="width: 75%"></div>
+                    </div>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-0">Station C</h6>
+                        <small class="text-muted">50kW DC Charger</small>
+                      </div>
+                      <span class="badge bg-danger">Maintenance</span>
+                    </div>
+                    <div class="progress mt-2" style="height: 5px;">
+                      <div class="progress-bar bg-danger" style="width: 100%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Energy Tariffs -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Energy Tariffs</h5>
+              </div>
+              <div class="card-body">
+                <div id="energyTariffChart" style="height: 200px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="src/charging.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Route Optimization - Fleet Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="sidebar-title">Fleet Manager</h3>
+          <button id="sidebarCollapse" class="btn btn-link text-light">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li>
+          <a href="index.html" class="nav-link text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="route-optimization.html" class="nav-link text-white">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span class="menu-text">Route Optimization</span>
+          </a>
+        </li>
+        <li>
+          <a href="maintenance.html" class="nav-link text-white">
+            <i class="bi bi-tools me-2"></i>
+            <span class="menu-text">Maintenance</span>
+          </a>
+        </li>
+        <li>
+          <a href="performance.html" class="nav-link text-white">
+            <i class="bi bi-graph-up me-2"></i>
+            <span class="menu-text">Performance</span>
+          </a>
+        </li>
+        <li>
+          <a href="tracking.html" class="nav-link text-white">
+            <i class="bi bi-truck me-2"></i>
+            <span class="menu-text">Vehicle Tracking</span>
+          </a>
+        </li>
+        <li>
+          <a href="charging.html" class="nav-link text-white">
+            <i class="bi bi-battery-charging me-2"></i>
+            <span class="menu-text">EV Charging</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light" id="themeToggle">
+          <i class="bi bi-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+      <!-- Top Settings Panel -->
+      <div class="container-fluid p-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <!-- Algorithm Settings -->
+              <div class="col-md-3">
+                <h5 class="mb-3">Algorithm Settings</h5>
+                <div class="mb-3">
+                  <label class="form-label">Optimization Algorithm</label>
+                  <select class="form-select" id="algorithmSelect">
+                    <option value="genetic">Genetic Algorithm</option>
+                    <option value="tabu">Tabu Search</option>
+                    <option value="simulated">Simulated Annealing</option>
+                    <option value="alns">Adaptive Large Neighborhood Search</option>
+                    <option value="clarke">Clarke & Wright Savings</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Vehicle Settings -->
+              <div class="col-md-3">
+                <h5 class="mb-3">Vehicle Settings</h5>
+                <div class="mb-3">
+                  <label class="form-label">Vehicle Type</label>
+                  <select class="form-select">
+                    <option>Electric Van</option>
+                    <option>Electric Truck</option>
+                    <option>Hybrid Vehicle</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <h5 class="mb-3">Objective Function Settings</h5>
+                <div class="mb-3">
+                  <label class="form-label">Objectives</label>
+                  <select class="form-select" id="objectiveSelect">
+                    <option value="min_distance">Min. Total Distance</option>
+                    <option value="min_energy">Min. Total Energy</option>
+                    <option value="min_time">Min. Total Time</option>
+                    <option value="min_tardiness">Min. Total Tardiness</option>
+                  </select>
+                </div>
+              </div>
+              <!-- Charging Settings -->
+              <div class="col-md-3">
+                <h5 class="mb-3">Charging Strategy</h5>
+                <div class="mb-3">
+                  <label class="form-label">Charging Method</label>
+                  <select class="form-select" id="strategySelect">
+                    <option value="opportunistic">Opportunistic Charging</option>
+                    <option value="scheduled">Scheduled Charging</option>
+                    <option value="minimal">Minimal Charging</option>
+                    <option value="optimal">Optimal Charging</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="row">
+          <!-- Task Panel -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Task Pool</h5>
+                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#newTaskModal">
+                  <i class="bi bi-plus-lg"></i> New Task
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="taskList" class="task-list">
+                  <!-- Tasks will be dynamically added here -->
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-primary w-100" id="startOptimization" disabled>
+                  <i class="bi bi-play-fill me-2"></i>
+                  Start Optimization
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map and Performance Panel -->
+          <div class="col-md-8">
+            <!-- Map -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Route Map</h5>
+              </div>
+              <div class="card-body p-0">
+                <div id="map" style="height: 400px;"></div>
+              </div>
+            </div>
+
+            <!-- Performance Metrics -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Performance Metrics</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-3 mb-3">
+                    <div class="metric-card">
+                      <small class="text-muted">Total Distance</small>
+                      <h4 class="mb-0" id="totalDistance">-</h4>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="metric-card">
+                      <small class="text-muted">Energy Usage</small>
+                      <h4 class="mb-0" id="energyUsage">-</h4>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="metric-card">
+                      <small class="text-muted">Total Time</small>
+                      <h4 class="mb-0" id="totalTime">-</h4>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="metric-card">
+                      <small class="text-muted">Tardiness</small>
+                      <h4 class="mb-0" id="tardiness">-</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="src/route-optimization.js"></script>
+</body>
+</html>

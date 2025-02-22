@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maintenance - Fleet Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="sidebar-title">Fleet Manager</h3>
+          <button id="sidebarCollapse" class="btn btn-link text-light">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <ul class="list-unstyled components">
+        <li>
+          <a href="index.html" class="nav-link text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            <span class="menu-text">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="route-optimization.html" class="nav-link text-white">
+            <i class="bi bi-geo-alt me-2"></i>
+            <span class="menu-text">Route Optimization</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="maintenance.html" class="nav-link text-white">
+            <i class="bi bi-tools me-2"></i>
+            <span class="menu-text">Maintenance</span>
+          </a>
+        </li>
+        <li>
+          <a href="performance.html" class="nav-link text-white">
+            <i class="bi bi-graph-up me-2"></i>
+            <span class="menu-text">Performance</span>
+          </a>
+        </li>
+        <li>
+          <a href="tracking.html" class="nav-link text-white">
+            <i class="bi bi-truck me-2"></i>
+            <span class="menu-text">Vehicle Tracking</span>
+          </a>
+        </li>
+        <li>
+          <a href="charging.html" class="nav-link text-white">
+            <i class="bi bi-battery-charging me-2"></i>
+            <span class="menu-text">EV Charging</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light" id="themeToggle">
+          <i class="bi bi-moon"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content">
+      <div class="container-fluid p-4">
+        <!-- Overview Cards -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Scheduled Maintenance</h6>
+                    <h2 class="card-title mb-0">8</h2>
+                  </div>
+                  <div class="text-primary">
+                    <i class="bi bi-calendar-check display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Urgent Repairs</h6>
+                    <h2 class="card-title mb-0">3</h2>
+                  </div>
+                  <div class="text-danger">
+                    <i class="bi bi-exclamation-triangle display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Predictive Alerts</h6>
+                    <h2 class="card-title mb-0">5</h2>
+                  </div>
+                  <div class="text-warning">
+                    <i class="bi bi-bell display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="card-subtitle mb-2 text-muted">Fleet Health Score</h6>
+                    <h2 class="card-title mb-0">87%</h2>
+                  </div>
+                  <div class="text-success">
+                    <i class="bi bi-heart-pulse display-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Maintenance Schedule -->
+          <div class="col-md-8">
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Maintenance Schedule</h5>
+                <div class="btn-group">
+                  <button class="btn btn-outline-secondary active">Day</button>
+                  <button class="btn btn-outline-secondary">Week</button>
+                  <button class="btn btn-outline-secondary">Month</button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Vehicle</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>EV-001</td>
+                        <td><span class="badge bg-warning">Periodic</span></td>
+                        <td>Tire Rotation</td>
+                        <td><span class="badge bg-info">Scheduled</span></td>
+                        <td>2024-02-15</td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>EV-002</td>
+                        <td><span class="badge bg-danger">Repair</span></td>
+                        <td>Brake System Check</td>
+                        <td><span class="badge bg-danger">Urgent</span></td>
+                        <td>2024-02-10</td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>EV-003</td>
+                        <td><span class="badge bg-info">Predictive</span></td>
+                        <td>Battery Health Check</td>
+                        <td><span class="badge bg-warning">Pending</span></td>
+                        <td>2024-02-20</td>
+                        <td>
+                          <button class="btn btn-sm btn-primary">Details</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Maintenance History -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Maintenance History</h5>
+              </div>
+              <div class="card-body">
+                <div id="maintenanceHistory"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vehicle Health & Alerts -->
+          <div class="col-md-4">
+            <!-- Vehicle Health Status -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Vehicle Health Status</h5>
+              </div>
+              <div class="card-body">
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span>Battery Health</span>
+                    <span>85%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" style="width: 85%"></div>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span>Brake System</span>
+                    <span>92%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" style="width: 92%"></div>
+                  </div>
+                </div>
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span>Tire Condition</span>
+                    <span>78%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-warning" style="width: 78%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="d-flex justify-content-between mb-1">
+                    <span>Overall Performance</span>
+                    <span>88%</span>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" style="width: 88%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Maintenance Alerts -->
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Maintenance Alerts</h5>
+                <button class="btn btn-sm btn-outline-secondary">
+                  View All
+                </button>
+              </div>
+              <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Brake System Warning</h6>
+                      <small class="text-danger">Urgent</small>
+                    </div>
+                    <p class="mb-1">EV-002 requires immediate brake inspection</p>
+                    <small class="text-muted">2 hours ago</small>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Battery Performance Alert</h6>
+                      <small class="text-warning">Warning</small>
+                    </div>
+                    <p class="mb-1">EV-003 battery efficiency below threshold</p>
+                    <small class="text-muted">5 hours ago</small>
+                  </div>
+                  <div class="list-group-item">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h6 class="mb-1">Scheduled Maintenance Due</h6>
+                      <small class="text-info">Info</small>
+                    </div>
+                    <p class="mb-1">Regular maintenance due for EV-001</p>
+                    <small class="text-muted">1 day ago</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="src/maintenance.js"></script>
+</body>
+</html>

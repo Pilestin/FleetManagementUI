@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Advanced Rota Optimizasyon</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.2/dist/frappe-gantt.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        .sidebar {
+            background: #2c3e50;
+            min-height: 100vh;
+        }
+        .metric-card {
+            border: none;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+      #map {
+        height: 70vh;
+        border-radius: 8px;
+      }
+      .customer-card {
+        transition: all 0.2s;
+      }
+      .customer-card:hover {
+        transform: translateY(-2px);
+      }
+      .gantt-container {
+        height: 250px;
+      }
+    </style>
+  </head>
+  <body >
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar p-4">
+          <h3 class="text-white mb-4">
+            <i class="fas fa-truck-moving"></i> FiloNET
+          </h3>
+          <div class="list-group">
+            <a
+              href="dashboard.html"
+              class="list-group-item list-group-item-action bg-transparent text-white"
+              ><i class="fas fa-home me-2"></i>Dashboard</a
+            >
+            <a
+              href="rota.html"
+              class="list-group-item list-group-item-action bg-transparent text-white"
+              ><i class="fas fa-route me-2"></i>Rota Optimizasyon</a
+            >
+            <a
+              href="arac-takip.html"
+              class="list-group-item list-group-item-action bg-transparent text-white"
+              ><i class="fas fa-satellite-dish me-2"></i>Araç Takip</a
+            >
+            <a
+              href="sarj.html"
+              class="list-group-item list-group-item-action bg-transparent text-white"
+              ><i class="fas fa-charging-station me-2"></i>Şarj Planlama</a
+            >
+            <a
+              href="performans.html"
+              class="list-group-item list-group-item-action bg-transparent text-white"
+              ><i class="fas fa-chart-line me-2"></i>Performans</a
+            >
+          </div>
+        </div>
+        <div class="col-md-10 container-fluid vh-100">
+          <div class="row h-100 g-0">
+            <!-- Sol Panel -->
+            <div class="col-md-3 p-3 bg-white border-end">
+              <div class="config-row mb-3">
+                <select class="form-select mb-2">
+                  <option>Genetic Algorithm</option>
+                  <option>Google OR-Tools</option>
+                </select>
+                <select class="form-select mb-2">
+                  <option>Dinamik Şarj</option>
+                  <option>Sabit Şarj</option>
+                </select>
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Parametre 1"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Parametre 2"
+                />
+              </div>
+
+              <h5 class="mb-3">Görev Yönetimi</h5>
+
+              <!-- Görev Seçim Dropdown -->
+              <div class="mb-3">
+                <select class="form-select" id="taskDropdown">
+                  <option value="">Görev Seçin</option>
+                  <option>C05</option>
+                  <option>C10</option>
+                  <option>C20</option>
+                  <option>C40</option>
+                  <option>C60</option>
+                  <option>R05</option>
+                  <option>R10</option>
+                  <option>R20</option>
+                  <option>R40</option>
+                  <option>R60</option>
+                  <option>RC05</option>
+                  <option>RC10</option>
+                  <option>RC20</option>
+                  <option>RC40</option>
+                  <option>RC60</option>
+                </select>
+              </div>
+
+              <!-- Müşteri Listesi -->
+              <div class="mb-3">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-2"
+                >
+                  <h6>Seçili Müşteriler</h6>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="selectAll"
+                    />
+                    <label class="form-check-label small">Tümünü Seç</label>
+                  </div>
+                </div>
+
+                <div
+                  id="customerList"
+                  class="overflow-auto"
+                  style="max-height: 50vh"
+                >
+                  <!-- Müşteri kartları JS ile eklenecek -->
+                </div>
+              </div>
+
+              <button class="btn btn-primary w-100" id="optimizeBtn">
+                <i class="fas fa-route me-2"></i>Rotayı Optimize Et
+              </button>
+            </div>
+
+            <!-- Harita ve Alt Paneller -->
+            <div class="col-md-6 p-3">
+              <div id="map"></div>
+
+              <!-- Alt Tablar -->
+              <ul class="nav nav-tabs mt-3" id="myTab">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    data-bs-toggle="tab"
+                    href="#analysis"
+                    >Analiz</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" data-bs-toggle="tab" href="#gantt"
+                    >Gantt Chart</a
+                  >
+                </li>
+              </ul>
+
+              <div class="tab-content bg-white p-3">
+                <!-- Analiz Tab -->
+                <div class="tab-pane fade show active" id="analysis">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <canvas id="chart1"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                      <canvas id="chart2"></canvas>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Gantt Tab -->
+                <div class="tab-pane fade" id="gantt">
+                  <div class="gantt-container"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sağ Panel -->
+            <div class="col-md-3 p-3 bg-white border-start">
+              <h5 class="mb-3">Rota Detayları</h5>
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h6 class="card-title">Toplam Mesafe</h6>
+                  <h2 class="text-primary">0 km</h2>
+                  <hr />
+                  <div class="row small">
+                    <div class="col-6">Tahmini Süre:</div>
+                    <div class="col-6 text-end">0 dk</div>
+                    <div class="col-6">Enerji Tüketimi:</div>
+                    <div class="col-6 text-end">0 kWh</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Müşteri Düzenleme Modal -->
+        <div class="modal fade" id="editModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Müşteri Düzenle</h5>
+              </div>
+              <div class="modal-body">
+                <form id="editForm">
+                  <div class="mb-3">
+                    <label class="form-label">Müşteri Adı</label>
+                    <input type="text" class="form-control" id="customerName" />
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Zaman Aralığı</label>
+                      <input type="text" class="form-control" id="timeWindow" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Öncelik</label>
+                      <select class="form-select" id="priority">
+                        <option value="high">Yüksek</option>
+                        <option value="medium">Orta</option>
+                        <option value="low">Düşük</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">İletişim</label>
+                    <input type="text" class="form-control" id="contact" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Scriptler -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.2/dist/frappe-gantt.min.js"></script>
+    <script>
+      // Mock Data
+      const mockTasks = [
+        {
+          id: 1,
+          customer: "Endüstri Mühendisliği",
+          location: [39.749081, 30.4745729], // Güncellendi
+          timeWindow: "09:00 - 10:00",
+          priority: "high",
+          status: "pending",
+          details: {
+            contact: "Prof. Dr. Ahmet Yılmaz (Bölüm Başkanı)",
+            phone: "0222 123 4567",
+            notes: "Bölüm sekreterliğinde teslim edilecek",
+          },
+        },
+        {
+          id: 2,
+          customer: "Fen Edebiyat Fakültesi",
+          location: [39.7513058, 30.484667], // Güncellendi
+          timeWindow: "10:30 - 11:30",
+          priority: "medium",
+          status: "pending",
+          details: {
+            contact: "Doç. Dr. Ayşe Kaya (Dekan Yardımcısı)",
+            phone: "0222 123 4568",
+            notes: "Ana bina girişinde teslim edilecek",
+          },
+        },
+        {
+          id: 3,
+          customer: "Merkez Kütüphane",
+          location: [39.7507028, 30.4854958], // Güncellendi
+          timeWindow: "11:00 - 12:00",
+          priority: "medium",
+          status: "pending",
+          details: {
+            contact: "Mehmet Demir (Kütüphane Müdürü)",
+            phone: "0222 123 4569",
+            notes: "Giriş katta resepsiyona teslim edilecek",
+          },
+        },
+        {
+          id: 4,
+          customer: "Spor Salonu",
+          location: [39.7503215, 30.4800783], // Güncellendi
+          timeWindow: "13:00 - 14:00",
+          priority: "low",
+          status: "pending",
+          details: {
+            contact: "Ali Yıldız (Antrenör)",
+            phone: "0222 123 4570",
+            notes: "Spor salonu malzeme odasına bırakılacak",
+          },
+        },
+        {
+          id: 5,
+          customer: "Rektörlük Binası",
+          location: [39.7505605, 30.4855774], // Güncellendi
+          timeWindow: "14:30 - 15:30",
+          priority: "high",
+          status: "pending",
+          details: {
+            contact: "Fatma Şahin (Rektörlük Sekreteri)",
+            phone: "0222 123 4571",
+            notes: "Makam katına özel evrak teslim edilecek",
+          },
+        },
+      ];
+      // Leaflet Harita Başlatma
+      const map = L.map("map").setView([39.7505605, 30.4855774], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
+        map
+      );
+
+      // Müşteri Listesini Oluşturma
+      const customerList = document.getElementById("customerList");
+      mockTasks.forEach((task) => {
+        const card = document.createElement("div");
+        card.className = "card customer-card mb-2";
+        card.innerHTML = `
+                <div class="card-body p-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="task${task.id}">
+                        <label class="form-check-label w-100" for="task${task.id}">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">${task.customer}</h6>
+                                    <small class="text-muted">${task.timeWindow}</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            `;
+        customerList.appendChild(card);
+      });
+
+      // Tümünü Seç İşlevi
+      document.getElementById("selectAll").addEventListener("change", (e) => {
+        document
+          .querySelectorAll('#customerList input[type="checkbox"]')
+          .forEach((checkbox) => {
+            checkbox.checked = e.target.checked;
+          });
+      });
+
+      // Düzenleme Modalı
+      document.querySelectorAll(".edit-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const task = mockTasks.find(
+            (t) =>
+              t.id === parseInt(btn.closest(".card").id.replace("task", ""))
+          );
+          document.getElementById("customerName").value = task.customer;
+          document.getElementById("timeWindow").value = task.timeWindow;
+          document.getElementById("priority").value = task.priority;
+          document.getElementById("contact").value = task.details.contact;
+          new bootstrap.Modal(document.getElementById("editModal")).show();
+        });
+      });
+
+      // Grafikler
+      new Chart(document.getElementById("chart1"), {
+        type: "bar",
+        data: {
+          labels: ["Araç 1", "Araç 2", "Araç 3"],
+          datasets: [
+            {
+              label: "Yük Dağılımı (%)",
+              data: [65, 45, 80],
+              backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"],
+            },
+          ],
+        },
+      });
+
+      new Chart(document.getElementById("chart2"), {
+        type: "doughnut",
+        data: {
+          labels: ["Yüksek", "Orta", "Düşük"],
+          datasets: [
+            {
+              data: [2, 3, 1],
+              backgroundColor: ["#ef4444", "#f59e0b", "#10b981"],
+            },
+          ],
+        },
+      });
+
+      // Gantt Chart
+      const gantt = new Gantt(".gantt-container", [
+        {
+          id: "Task 1",
+          name: "Endüstri Müh.",
+          start: "2023-10-01",
+          end: "2023-10-01",
+          progress: 100,
+        },
+        {
+          id: "Task 2",
+          name: "Fen Edebiyat",
+          start: "2023-10-01",
+          end: "2023-10-02",
+          progress: 60,
+        },
+      ]);
+
+      // Rota Optimizasyon İşlevi
+      document.getElementById("optimizeBtn").addEventListener("click", () => {
+        const selectedTasks = mockTasks.filter(
+          (_, i) =>
+            document.querySelectorAll('#customerList input[type="checkbox"]')[i]
+              .checked
+        );
+
+        const coordinates = selectedTasks.map((task) => task.location);
+        L.polyline(coordinates, { color: "blue" }).addTo(map);
+        map.fitBounds(coordinates);
+      });
+    </script>
+  </body>
+</html>
